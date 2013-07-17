@@ -1,6 +1,3 @@
 require 'pg_searchable/version'
-require 'arel'
-
-module PgSearchable
-  # Your code goes here...
-end
+require 'pg_searchable/active_record'
+require 'pg_searchable/arel'
