@@ -1,1 +1,1 @@
-require 'pg_searchable/arel/nodes/similarity'
+require 'pg_searchable/arel/nodes/tgrm'
