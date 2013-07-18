@@ -6,8 +6,8 @@ module Arel
       Nodes::Tgrm.new(self, text)
     end
 
-    def ts_query(text, dictionary = 'simple')
-      Nodes::TsQuery.new(self, text, dictionary)
+    def tsearch(text, dictionary = 'simple')
+      Nodes::Tsearch.new(self, text, dictionary)
     end
 
     def dmetaphone(text, dictionary = 'simple')

@@ -2,7 +2,7 @@ require 'arel/nodes/infix_operation'
 
 module Arel
   module Nodes
-    class TsQuery < Arel::Nodes::InfixOperation
+    class Tsearch < Arel::Nodes::InfixOperation
       def initialize(attribute, query, dictionary)
         relation  = attribute.relation
         columns   = relation.engine.connection.columns_hash(relation.name)

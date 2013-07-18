@@ -8,15 +8,15 @@ describe "text search predications" do
     end
   end
 
-  describe "ts_query" do
+  describe "tsearch" do
     it "should compare column as tsvector when a string" do
       table = Arel::Table.new :articles
-      table[:title].ts_query("query", "dictionary").to_sql.must_be_like %{to_tsvector("articles"."title") @@ to_tsquery('dictionary', 'query')}
+      table[:title].tsearch("query", "dictionary").to_sql.must_be_like %{to_tsvector("articles"."title") @@ to_tsquery('dictionary', 'query')}
     end
 
     it "should compare column as is when a tsvector" do
       table = Arel::Table.new :articles
-      table[:tsvector].ts_query("query", "dictionary").to_sql.must_be_like %{"articles"."tsvector" @@ to_tsquery('dictionary', 'query')}
+      table[:tsvector].tsearch("query", "dictionary").to_sql.must_be_like %{"articles"."tsvector" @@ to_tsquery('dictionary', 'query')}
     end
   end
 
