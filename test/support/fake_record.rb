@@ -13,11 +13,13 @@ module FakeRecord
           Column.new('id', :integer),
           Column.new('title', :string),
           Column.new('body', :text),
-          Column.new('created_at', :date)
+          Column.new('created_at', :date),
+          Column.new('tsvector', :tsvector)
         ],
         'categories' => [
           Column.new('id', :integer),
-          Column.new('name', :string)
+          Column.new('name', :string),
+          Column.new('tsvector', :tsvector)
         ]
       }
       @columns_hash = {

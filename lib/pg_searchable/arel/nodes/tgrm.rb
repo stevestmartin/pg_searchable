@@ -1,3 +1,5 @@
+require 'arel/nodes/infix_operation'
+
 module Arel
   module Nodes
     class Tgrm < Arel::Nodes::InfixOperation
