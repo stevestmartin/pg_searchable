@@ -10,10 +10,10 @@ module Arel
         when :tsvector
           attribute
         else
-          Arel::Nodes::NamedFunction.new(:to_tsvector, [attribute])
+          Arel::Nodes::ToTsvector.new(attribute, dictionary)
         end
 
-        super(:'@@', left, Arel::Nodes::NamedFunction.new(:to_tsquery, [dictionary, query]))
+        super(:'@@', left, Arel::Nodes::ToTsquery.new(query, dictionary))
       end
     end
   end
