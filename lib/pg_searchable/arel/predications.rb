@@ -9,5 +9,9 @@ module Arel
     def ts_query(text, dictionary = 'simple')
       Nodes::TsQuery.new(self, text, dictionary)
     end
+
+    def dmetaphone(text, dictionary = 'simple')
+      Nodes::Dmetaphone.new(self, text, dictionary)
+    end
   end
 end
