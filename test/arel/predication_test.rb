@@ -21,9 +21,9 @@ describe "text search predications" do
   end
 
   describe "dmetaphone" do
-    # it "should compare using dmetaphone function" do
-    #   table = Arel::Table.new :articles
-    #   table[:title].dmetaphone("query").to_sql.must_be_like %{"articles"."title" % 'query'}
-    # end
+    it "should compare using dmetaphone function" do
+      table = Arel::Table.new :articles
+      table[:title].dmetaphone("query", "dictionary").to_sql.must_be_like %{to_tsvector('dictionary', "articles"."title") @@ to_tsquery('dictionary', 'query')}
+    end
   end
 end
