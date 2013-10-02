@@ -1,4 +1,5 @@
 require 'pg_searchable/arel/nodes/dmetaphone'
+require 'pg_searchable/arel/nodes/pg_searchable_dmetaphone'
 require 'pg_searchable/arel/nodes/tgrm'
 require 'pg_searchable/arel/nodes/tsearch'
 require 'pg_searchable/arel/nodes/to_tsquery'

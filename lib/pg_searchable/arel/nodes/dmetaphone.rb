@@ -18,7 +18,7 @@ module Arel
           Arel::Nodes::ToTsvector.new(attribute, dictionary)
         end
 
-        super(:'@@', left, Arel::Nodes::ToTsquery.new(query, dictionary))
+        super(:'@@', left, Arel::Nodes::ToTsquery.new(Arel::Nodes::PgSearchableDmetaphone.new(query), dictionary))
       end
     end
   end
