@@ -12,6 +12,10 @@ module ActiveRecord
       _add_pg_searchable_trigger(table_name, column_name, :tsearch, column_data)
     end
 
+    def remove_pg_searchable_tsearch_trigger(table_name, column_name)
+      _remove_pg_searchable_trigger(table_name, column_name, :tsearch)
+    end
+
     def add_pg_searchable_dmetaphone_trigger(table_name, column_name, options = {})
       options.reverse_merge({ dictionary: 'simple', columns: nil })
       column_data           = case options[:columns]
@@ -20,6 +24,44 @@ module ActiveRecord
       end
 
       _add_pg_searchable_trigger(table_name, column_name, :dmetaphone, column_data)
+    end
+
+    def remove_pg_searchable_dmetaphone_trigger(table_name, column_name)
+      _remove_pg_searchable_trigger(table_name, column_name, :dmetaphone)
+    end
+
+    def add_pg_searchable_dictionary(dictionary, options = {})
+      remove_pg_searchable_dictionary(dictionary)
+
+      options.reverse_merge({
+        catalog:    'english',
+        template:   'ispell',
+        dict_file:  'english',
+        aff_file:   'english',
+        stop_words: 'english',
+        mappings:   'asciiword, asciihword, hword_asciipart, word, hword, hword_part'
+      })
+
+      execute <<-EOS
+        CREATE TEXT SEARCH CONFIGURATION #{dictionary} ( COPY = pg_catalog.#{options[:catalog]} );
+        CREATE TEXT SEARCH DICTIONARY #{dictionary}_dict (
+          TEMPLATE = #{options[:template]},
+          DictFile = #{options[:dict_file]},
+          AffFile = #{options[:aff_file]},
+          StopWords = #{optiions[:stop_words]}
+        );
+        ALTER TEXT SEARCH CONFIGURATION #{dictionary}
+        ALTER MAPPING FOR #{options[:mappings]}
+        WITH unaccent, #{dictionary}_dict, english_stem;
+
+      EOS
+    end
+
+    def remove_pg_searchable_dictionary(dictionary)
+      execute <<-SQL
+        DROP TEXT SEARCH CONFIGURATION #{dictionary};
+        DROP TEXT SEARCH DICTIONARY #{dictionary}_dict;
+      SQL
     end
 
   private
