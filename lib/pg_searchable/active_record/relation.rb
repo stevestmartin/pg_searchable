@@ -5,11 +5,18 @@ module PgSearchable
     module Relation
       def search_for(term, options = {})
         puts "searching for #{term}"
+        self
       end
 
-      def order_by_rank(rank)
+      def near(latitude, longitude)
+        puts "searching near #{latitude},#{longitude}"
+        self
+      end
+
+      def rank_by(rank)
         # TODO: add ranks to projections
         puts "ranking by #{rank}"
+        self
       end
     end
   end
