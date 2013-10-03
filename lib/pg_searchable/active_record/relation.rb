@@ -5,14 +5,20 @@ module PgSearchable
     module Relation
       def search_for(term, options = {})
         using       = Array(options.delete(:using) || :default)
-        config_name = using.find {|name| pg_searchable_configs.key?(name.to_sym) }
-        config      = pg_searchable_configs[config_name]
+        models      = Array(options[:in]).map {|association| klass.reflect_on_association(association).klass }
+        conditions  = [self.klass, models].flatten.inject([]) do |conditions, klass|
+          name    = using.find {|name| klass.pg_searchable_configs.key?(name.to_sym) }
+          config  = klass.pg_searchable_configs[name]
 
-        tgrm        = Array(config[:tgrm][:columns]).map        {|name| arel_table[name].tgrm(term).to_sql }
-        tsearch     = Array(config[:tsearch][:columns]).map     {|name| arel_table[name].tsearch(term, config[:tsearch][:dictionary]).to_sql }
-        dmetaphone  = Array(config[:dmetaphone][:columns]).map  {|name| arel_table[name].dmetaphone(term, config[:dmetaphone][:dictionary]).to_sql }
+          Array(config[:tgrm][:columns]).each       {|name| conditions << klass.arel_table[name].tgrm(term).to_sql }
+          Array(config[:tsearch][:columns]).each    {|name| conditions << klass.arel_table[name].tsearch(term, config[:tsearch][:dictionary]).to_sql }
+          Array(config[:dmetaphone][:columns]).each {|name| conditions << klass.arel_table[name].dmetaphone(term, config[:dmetaphone][:dictionary]).to_sql }
+          conditions
+        end
 
-        where("#{[tsearch, dmetaphone, tgrm].flatten.join(' OR ')}")
+        p conditions
+
+        joins(options[:in]).where("#{conditions.join(' OR ')}")
       end
 
       def near(latitude, longitude)
