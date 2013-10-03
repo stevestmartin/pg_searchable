@@ -59,8 +59,8 @@ module ActiveRecord
 
     def remove_pg_searchable_dictionary(dictionary)
       execute <<-SQL
-        DROP TEXT SEARCH CONFIGURATION #{dictionary};
-        DROP TEXT SEARCH DICTIONARY #{dictionary}_dict;
+        DROP TEXT SEARCH CONFIGURATION IF EXISTS #{dictionary};
+        DROP TEXT SEARCH DICTIONARY IF EXISTS#{dictionary}_dict;
       SQL
     end
 
