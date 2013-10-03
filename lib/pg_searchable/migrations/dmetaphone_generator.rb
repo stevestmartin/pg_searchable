@@ -3,7 +3,7 @@ require 'rails/generators/base'
 module PgSearchable
   module Migrations
     class DmetaphoneGenerator < Rails::Generators::Base
-      source File.expand_path('../templates', __FILE__)
+      source_root File.expand_path('../templates', __FILE__)
 
       def create_migration
         now = Time.now.utc
