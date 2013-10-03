@@ -5,8 +5,8 @@ module ActiveRecord
     def add_pg_searchable_tsearch_trigger(table_name, column_name, options = {})
       options.reverse_merge({ dictionary: 'simple', columns: nil })
       column_data           = case options[:columns]
-        when Array then "to_tsvector('#{options['dictionary']}', #{options[:columns].map {|column_name| "coalesce(#{column_name}, '')" }.join(" || ' ' || ") });"
-        when Hash then "#{options[:columns].map {|column_name, weight| "setweight(to_tsvector('#{options[:dictionary]}', coalesce(#{column_name}, '')), '#{weight}')" }.join(" || ")};"
+        when Array then "to_tsvector('#{options['dictionary']}', #{options[:columns].map {|column_name| "coalesce(new.#{column_name}, '')" }.join(" || ' ' || ") });"
+        when Hash then "#{options[:columns].map {|column_name, weight| "setweight(to_tsvector('#{options[:dictionary]}', coalesce(new.#{column_name}, '')), '#{weight}')" }.join(" || ")};"
       end
 
       _add_pg_searchable_trigger(table_name, column_name, :tsearch, column_data)
@@ -19,8 +19,8 @@ module ActiveRecord
     def add_pg_searchable_dmetaphone_trigger(table_name, column_name, options = {})
       options.reverse_merge({ dictionary: 'simple', columns: nil })
       column_data           = case options[:columns]
-        when Array then "to_tsvector('#{options['dictionary']}', #{options[:columns].map {|column_name| "pg_searchable_dmetaphone(coalesce(#{column_name}, ''))" }.join(" || ' ' || ") });"
-        when Hash then "#{options[:columns].map {|column_name, weight| "setweight(to_tsvector('#{options[:dictionary]}', pg_searchable_dmetaphone(coalesce(#{column_name}, ''))), '#{weight}')" }.join(" || ")};"
+        when Array then "to_tsvector('#{options['dictionary']}', #{options[:columns].map {|column_name| "pg_searchable_dmetaphone(coalesce(new.#{column_name}, ''))" }.join(" || ' ' || ") });"
+        when Hash then "#{options[:columns].map {|column_name, weight| "setweight(to_tsvector('#{options[:dictionary]}', pg_searchable_dmetaphone(coalesce(new.#{column_name}, ''))), '#{weight}')" }.join(" || ")};"
       end
 
       _add_pg_searchable_trigger(table_name, column_name, :dmetaphone, column_data)
