@@ -12,21 +12,28 @@ module PgSearchable
 
       module ClassMethods
         def pg_searchable (name, options = {})
-          # precompute data for subsequent calls
-          @_pg_searchable ||= {}
-          @_pg_searchable_columns ||= columns_hash.find_all {|k,v| [:string, :text].include?(v.type) }.map {|k,v| v.name}
-          @_pg_searchable_options ||= DEFAULT_OPTIONS.merge(columns: @_pg_searchable_columns)
-
-          # set configuration for current call
-          @_pg_searchable[name.to_sym] = {
-            tgrm:       @_pg_searchable_options,
-            dmetaphone: @_pg_searchable_options,
-            tsearch:    @_pg_searchable_options
+          pg_searchable_configs[name.to_sym] = {
+            tgrm:       _pg_searchable_options,
+            dmetaphone: _pg_searchable_options,
+            tsearch:    _pg_searchable_options
           }.deep_merge(options)
+        end
+
+        def pg_searchable_configs
+          @pg_searchable_configs ||= {}
         end
 
         def search_for(term, options = {})
           scoped.search_for(term, options)
+        end
+
+      private
+        def _pg_searchable_options
+          @_pg_searchable_options ||= DEFAULT_OPTIONS.merge(columns: _pg_searchable_columns)
+        end
+
+        def _pg_searchable_columns
+          @_pg_searchable_columns ||= columns_hash.find_all {|k,v| [:string, :text].include?(v.type) }.map {|k,v| v.name }
         end
       end
     end
