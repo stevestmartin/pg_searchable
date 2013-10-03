@@ -5,8 +5,8 @@ module Arel
     class Tsearch < Arel::Nodes::InfixOperation
       def initialize(attribute, query, dictionary)
         relation  = attribute.relation
-        columns   = relation.engine.connection.columns_hash(relation.name)
-        left      = case columns[attribute.name.to_s].type
+        columns   = relation.engine.connection.columns(relation.name)
+        left      = case columns.find {|c| c.name == attribute.name.to_s }.type
         when :tsvector
           attribute
         else

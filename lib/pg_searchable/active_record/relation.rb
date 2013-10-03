@@ -4,8 +4,7 @@ module PgSearchable
   module ActiveRecord
     module Relation
       def search_for(term, options = {})
-        puts "searching for #{term}"
-        self
+        where(arel_table[:name].dmetaphone(term, 'simple'))
       end
 
       def near(latitude, longitude)
