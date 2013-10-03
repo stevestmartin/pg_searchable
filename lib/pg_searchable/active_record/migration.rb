@@ -48,7 +48,7 @@ module ActiveRecord
           TEMPLATE = #{options[:template]},
           DictFile = #{options[:dict_file]},
           AffFile = #{options[:aff_file]},
-          StopWords = #{optiions[:stop_words]}
+          StopWords = #{options[:stop_words]}
         );
         ALTER TEXT SEARCH CONFIGURATION #{dictionary}
         ALTER MAPPING FOR #{options[:mappings]}
