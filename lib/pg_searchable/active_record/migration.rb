@@ -33,14 +33,14 @@ module ActiveRecord
     def add_pg_searchable_dictionary(dictionary, options = {})
       remove_pg_searchable_dictionary(dictionary)
 
-      options.reverse_merge({
+      options = {
         catalog:    'english',
         template:   'ispell',
         dict_file:  'english',
         aff_file:   'english',
         stop_words: 'english',
         mappings:   'asciiword, asciihword, hword_asciipart, word, hword, hword_part'
-      })
+      }.merge(options)
 
       execute <<-EOS
         CREATE TEXT SEARCH CONFIGURATION #{dictionary} ( COPY = pg_catalog.#{options[:catalog]} );
