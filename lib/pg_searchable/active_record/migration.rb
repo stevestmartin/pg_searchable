@@ -90,8 +90,8 @@ module ActiveRecord
       trigger_name = "#{table_name}_#{column_name}_#{trigger_type}"
 
       execute <<-SQL
-        DROP FUNCTION IF EXISTS #{trigger_name}_update();
         DROP TRIGGER IF EXISTS #{trigger_name} ON #{table_name};
+        DROP FUNCTION IF EXISTS #{trigger_name}_update();
       SQL
     end
   end
