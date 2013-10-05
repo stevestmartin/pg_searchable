@@ -23,10 +23,10 @@ module PgSearchable
             orders      << "(coalesce(similarity(#{klass.arel_table.name}.#{name}, '#{term}'), 0) / 4)"
           end
 
-          Array(config[:dmetaphone][:columns]).each do |name|
-            conditions  << klass.arel_table[name].dmetaphone(term, config[:dmetaphone][:dictionary]).to_sql
-            orders      << "(ts_rank_cd(ARRAY[#{config[:dmetaphone][:weights][0]}, #{config[:dmetaphone][:weights][1]}, #{config[:dmetaphone][:weights][2]}, #{config[:dmetaphone][:weights][3]}], #{arel_table.name}.#{name}, to_tsquery('#{config[:dmetaphone][:dictionary]}', pg_searchable_dmetaphone('#{term}')), #{config[:dmetaphone][:normalization]}) / 2)"
-          end
+          # Array(config[:dmetaphone][:columns]).each do |name|
+          #   conditions  << klass.arel_table[name].dmetaphone(term, config[:dmetaphone][:dictionary]).to_sql
+          #   orders      << "(ts_rank_cd(ARRAY[#{config[:dmetaphone][:weights][0]}, #{config[:dmetaphone][:weights][1]}, #{config[:dmetaphone][:weights][2]}, #{config[:dmetaphone][:weights][3]}], #{arel_table.name}.#{name}, to_tsquery('#{config[:dmetaphone][:dictionary]}', pg_searchable_dmetaphone('#{term}')), #{config[:dmetaphone][:normalization]}) / 2)"
+          # end
         end
 
         where("#{conditions.join(' OR ')}")#.order("#{orders.join(' + ')} DESC")
