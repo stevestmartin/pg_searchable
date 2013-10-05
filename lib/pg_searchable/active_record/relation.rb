@@ -20,9 +20,12 @@ module PgSearchable
       end
 
       def close_to(longitude, latitude, distance_in_miles = 5)
-        distance_in_meters = (distance_in_miles.to_f * 1609.34).ceil
+        distance_in_meters  = (distance_in_miles.to_f * 1609.34).ceil
+        longitude_column    = "longitude"
+        latitude_column     = "latitude"
+
         where("ST_DWithin(
-            ST_GeographyFromText('SRID=4326;POINT(' || licensees.longitude || ' ' || licensees.latitude || ')'),
+            ST_GeographyFromText('SRID=4326;POINT(' || #{arel_table.name}.#{longitude_column} || ' ' || #{arel_table.name}.#{latitude_column} || ')'),
             ST_GeographyFromText('SRID=4326;POINT(%f %f)'), %d
           )", longitude, latitude, distance_in_meters)
       end
