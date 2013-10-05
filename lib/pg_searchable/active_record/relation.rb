@@ -16,15 +16,10 @@ module PgSearchable
           conditions
         end
 
-        p conditions
-
-        joins(options[:in]).where("#{conditions.join(' OR ')}")
+        where("#{conditions.join(' OR ')}")
       end
 
-      def near(latitude, longitude)
-        puts "searching near #{latitude},#{longitude}"
-        self
-      end
+
 
       def rank_by(rank)
         # TODO: add ranks to projections
