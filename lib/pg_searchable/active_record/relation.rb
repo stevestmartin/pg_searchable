@@ -19,7 +19,13 @@ module PgSearchable
         where("#{conditions.join(' OR ')}")
       end
 
-
+      def close_to(longitude, latitude, distance_in_miles = 5)
+        distance_in_meters = (distance_in_miles.to_f * 1609.34).ceil
+        where("ST_DWithin(
+            ST_GeographyFromText('SRID=4326;POINT(' || licensees.longitude || ' ' || licensees.latitude || ')'),
+            ST_GeographyFromText('SRID=4326;POINT(%f %f)'), %d
+          )", longitude, latitude, distance_in_meters)
+      end
 
       def rank_by(rank)
         # TODO: add ranks to projections
