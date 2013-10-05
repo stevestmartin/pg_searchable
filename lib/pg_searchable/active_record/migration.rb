@@ -65,7 +65,7 @@ module ActiveRecord
     end
 
     def add_pg_searchable_point_index(table_name, longitude_column, latitude_column)
-      execute %{index_on_#{table_name}_#{longitude_column}_#{latitude_column}_point ON #{table_name} using gist (
+      execute %{CREATE INDEX index_#{table_name}_on_#{longitude_column}_#{latitude_column}_point ON #{table_name} using gist (
           ST_GeographyFromText(
             'SRID=4326;POINT(' || #{table_name}.#{longitude_column} || ' ' || #{table_name}.#{latitude_column} || ')'
           )
@@ -75,7 +75,7 @@ module ActiveRecord
 
     def remove_pg_searchable_point_index(table_name, longitude_column, latitude_column)
       execute %{
-        drop index index_on_#{table_name}_#{longitude_column}_#{latitude_column}_point
+        DROP INDEX index_#{table_name}_on_#{longitude_column}_#{latitude_column}_point
       }
     end
 

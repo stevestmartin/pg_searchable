@@ -27,6 +27,10 @@ module PgSearchable
           scoped.search_for(term, options)
         end
 
+        def close_to(longitude, latitude, distance_in_miles = 5)
+          scoped.close_to(longitude, latitude, distance_in_miles)
+        end
+
       private
         def _pg_searchable_options
           @_pg_searchable_options ||= DEFAULT_OPTIONS.merge(columns: _pg_searchable_columns)
