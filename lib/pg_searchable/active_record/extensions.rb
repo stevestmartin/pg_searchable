@@ -8,9 +8,11 @@ module PgSearchable
 
       DEFAULT_WEIGHTS     = [0.1, 0.2, 0.4, 1.0]
       DEFAULT_DICTIONARY  = 'english'
-      DEFAULT_OPTIONS     = { weights: DEFAULT_WEIGHTS, dictionary: DEFAULT_DICTIONARY }
+      DEFAULT_OPTIONS     = { weights: DEFAULT_WEIGHTS, dictionary: DEFAULT_DICTIONARY, normalization: 41 }
 
       module ClassMethods
+        delegate :close_to, :rank_by, :search_for, to: :scoped
+
         def pg_searchable (name, options = {})
           pg_searchable_configs[name.to_sym] = {
             tgrm:       _pg_searchable_options,
@@ -21,14 +23,6 @@ module PgSearchable
 
         def pg_searchable_configs
           @pg_searchable_configs ||= {}
-        end
-
-        def search_for(term, options = {})
-          scoped.search_for(term, options)
-        end
-
-        def close_to(longitude, latitude, distance_in_miles = 5)
-          scoped.close_to(longitude, latitude, distance_in_miles)
         end
 
       private
